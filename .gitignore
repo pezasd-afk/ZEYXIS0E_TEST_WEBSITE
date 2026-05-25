@@ -1,0 +1,11 @@
+node_modules/
+temporary screenshots/
+kordasarchitects.com_.png
+screenshot.mjs
+screenshot-final.mjs
+screenshot-section.mjs
+getHeight.mjs
+serve.mjs
+package.json
+package-lock.json
+.claude/

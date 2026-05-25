@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZEYXIS O.E. — Construction Company</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=DM+Sans:wght@300;400;500&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --ink:        #0B0B0D;
+      --ink-mid:    #3a3a3c;
+      --ink-soft:   #3d3d3f;
+      --ink-faint:  #505052;
+      --paper:      #FFFFFF;
+      --paper-mid:  #8E9070;
+      --olive:      #A5A780;
+      --white:      #FFFFFF;
+      --brand:      #3B5323;
+      --brand-dim:  rgba(59,83,35,0.15);
+      --line:       rgba(11,11,13,0.18);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Typography helpers ── */
+    .font-display { font-family: 'Barlow Condensed', sans-serif; }
+    .font-ui      { font-family: 'Space Grotesk', sans-serif; }
+
+    /* ── Utility ── */
+    .label-track {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--olive);
+    }
+    .label-track.brand { color: var(--olive); }
+
+    .project-desc-row {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 3rem 2.5rem 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+    }
+    @media (max-width: 900px) {
+      .project-desc-row { grid-template-columns: 1fr; gap: 1.5rem; }
+    }
+
+    hr.rule {
+      border: none;
+      border-top: 1px solid var(--line);
+    }
+
+    /* ══════════════════════════════════
+       NAV
+    ══════════════════════════════════ */
+    #nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 900;
+      background: transparent;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      transition: background 0.3s ease;
+    }
+    .nav-inner {
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2.5rem 0 190px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 10;
+      display: block;
+      line-height: 0;
+    }
+    .nav-logo img {
+      height: 80px;
+      width: auto;
+      display: block;
+    }
+    .nav-links {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 2.25rem;
+    }
+    .nav-links a {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .nav-links a:hover { color: #fff; }
+    .nav-links a:focus-visible { outline: 1px solid rgba(255,255,255,0.4); outline-offset: 4px; }
+    .nav-contact {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--white);
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 0.45rem 1.1rem;
+      border-radius: 2px;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+    .nav-contact:hover { border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.06); }
+    .nav-contact:focus-visible { outline: 1px solid rgba(255,255,255,0.5); outline-offset: 3px; }
+
+    /* ══════════════════════════════════
+       HERO
+    ══════════════════════════════════ */
+    .hero {
+      padding-top: 80px;
+      position: relative;
+      height: 100vh;
+      min-height: 640px;
+      overflow: hidden;
+    }
+    .hero-slides {
+      position: absolute;
+      inset: 0;
+    }
+    .hero-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 1.2s ease;
+    }
+    .hero-slide.active {
+      opacity: 1;
+    }
+    .hero-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transform: scale(1.06);
+    }
+    @keyframes kenburns {
+      from { transform: scale(1.06); }
+      to   { transform: scale(1);    }
+    }
+    .hero-slide.active img {
+      animation: kenburns 5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+
+    /* Slideshow dots */
+    .hero-dots {
+      position: absolute;
+      bottom: 2.75rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 0.5rem;
+      z-index: 10;
+    }
+    .hero-dot {
+      width: 20px;
+      height: 2px;
+      background: rgba(255,255,255,0.3);
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: background 0.3s ease, width 0.3s ease;
+    }
+    .hero-dot.active {
+      background: rgba(255,255,255,0.9);
+      width: 36px;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(11,11,13,0.18) 0%,
+        rgba(11,11,13,0.08) 40%,
+        rgba(11,11,13,0.55) 100%
+      );
+    }
+    .hero-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 0 2.5rem 2.75rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+    .hero-caption-left {}
+    .hero-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(3.5rem, 7vw, 7rem);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      color: #fff;
+      line-height: 0.9;
+    }
+    .hero-sub {
+      margin-top: 1rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 300;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.65);
+    }
+    .hero-scroll-hint {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.625rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+    }
+    .hero-scroll-hint::after {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 48px;
+      background: rgba(255,255,255,0.35);
+    }
+
+    /* ══════════════════════════════════
+       INTRO BAND
+    ══════════════════════════════════ */
+    .intro-section {
+      background: var(--paper);
+      border-bottom: 1px solid var(--line);
+    }
+    .intro-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 5.5rem 2.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+    .intro-left {}
+    .intro-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .intro-eyebrow-line {
+      width: 28px;
+      height: 1px;
+      background: var(--olive);
+    }
+    .intro-description {
+      font-size: 1.0625rem;
+      font-weight: 400;
+      line-height: 1.75;
+      color: var(--ink);
+      max-width: 420px;
+    }
+    .intro-meta {
+      margin-top: 2.5rem;
+      display: flex;
+      gap: 3rem;
+    }
+    .intro-stat-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--olive);
+      line-height: 1;
+    }
+    .intro-stat-lbl {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--olive);
+      margin-top: 0.25rem;
+      letter-spacing: 0.03em;
+    }
+    .intro-right {}
+    .intro-headline {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(3rem, 5vw, 5.5rem);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      color: var(--olive);
+      line-height: 0.92;
+    }
+    .intro-headline em {
+      font-style: italic;
+      color: var(--brand);
+      font-weight: 400;
+    }
+    .intro-tagline {
+      margin-top: 1.75rem;
+      font-size: 0.9375rem;
+      line-height: 1.7;
+      color: var(--ink-soft);
+      max-width: 380px;
+    }
+    .intro-sale-sub {
+      margin-top: 0.75rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(0.95rem, 1.6vw, 1.25rem);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--olive);
+      line-height: 1.45;
+    }
+    .intro-sale-note {
+      display: block;
+      font-size: 0.82em;
+      font-weight: 500;
+      color: var(--olive);
+      letter-spacing: 0.02em;
+      margin-top: 0.2rem;
+    }
+    .feature-list {
+      list-style: none;
+      margin-top: 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+    }
+    .feature-list li {
+      background: rgba(165,167,128,0.12);
+      border-left: 3px solid var(--olive);
+      border-radius: 0 3px 3px 0;
+      padding: 0.6rem 0.875rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.84rem;
+      font-weight: 700;
+      line-height: 1.4;
+      color: var(--olive);
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+    .feature-list li:hover {
+      background: rgba(165,167,128,0.22);
+    }
+    .feature-list li::before {
+      content: '';
+      display: block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--olive);
+      flex-shrink: 0;
+    }
+    .feature-list li.wide {
+      grid-column: span 2;
+    }
+
+    /* ══════════════════════════════════
+       CATEGORY STRIP
+    ══════════════════════════════════ */
+    .why-strip {
+      background:
+        linear-gradient(rgba(11,11,13,0.58), rgba(11,11,13,0.58)),
+        url('brand_assets/kiparissi.jpg') center / cover no-repeat;
+    }
+    .why-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 4rem 2.5rem;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .why-heading-col {}
+    .why-eyebrow {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .why-eyebrow::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: rgba(255,255,255,0.4);
+    }
+    .why-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(2.25rem, 3.5vw, 3.5rem);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      line-height: 0.95;
+    }
+    .why-title em {
+      font-style: italic;
+      font-weight: 400;
+      color: #b8d47a;
+    }
+    .why-text-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+    }
+    .why-para {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      line-height: 1.75;
+      color: #ffffff;
+    }
+    .why-para strong {
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    /* ══════════════════════════════════
+       SECTION LABEL ROW
+    ══════════════════════════════════ */
+    .section-label-row {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 3.5rem 2.5rem 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .section-label-row h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      color: var(--olive);
+    }
+    .projects-section .section-label-row {
+      background: var(--paper);
+    }
+    .section-label-row a {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 2px;
+      transition: border-color 0.2s ease;
+    }
+    .section-label-row a:hover { border-color: var(--ink); }
+
+    /* ══════════════════════════════════
+       PROJECTS GRID
+    ══════════════════════════════════ */
+    .projects-section {
+      background: var(--white);
+      border-top: 1px solid var(--line);
+      padding-bottom: 5rem;
+    }
+    .projects-grid {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2.5rem;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-auto-rows: 280px;
+      gap: 1rem;
+    }
+
+    /* Featured: spans 8 of 12 cols, 2 rows */
+    .proj-featured {
+      grid-column: span 8;
+      grid-row: span 2;
+    }
+    /* Tall right: spans 4, 2 rows */
+    .proj-tall {
+      grid-column: span 4;
+      grid-row: span 2;
+    }
+    /* Half: spans 4, 1 row */
+    .proj-half {
+      grid-column: span 4;
+      grid-row: span 1;
+    }
+    /* Wide: spans 8, 1 row */
+    .proj-wide {
+      grid-column: span 8;
+      grid-row: span 1;
+    }
+    /* Third: spans 4, 1 row */
+    .proj-third {
+      grid-column: span 4;
+    }
+
+    .proj-card {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .proj-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .proj-card:hover img { transform: scale(1.04); }
+    .proj-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(11,11,13,0.75) 0%, transparent 55%);
+    }
+    .proj-card:hover .proj-card-overlay { background: linear-gradient(to top, rgba(11,11,13,0.85) 0%, rgba(11,11,13,0.1) 60%); }
+    .proj-card-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1.5rem;
+    }
+    .proj-tag {
+      display: inline-block;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.5625rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 0.4rem;
+    }
+    .proj-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      color: #fff;
+      line-height: 1.1;
+    }
+    .proj-featured .proj-name { font-size: 2rem; }
+    .proj-loc {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.45);
+      margin-top: 0.2rem;
+    }
+
+    /* ══════════════════════════════════
+       FULL-WIDTH IMAGE BREAK
+    ══════════════════════════════════ */
+    .img-break {
+      position: relative;
+      height: 480px;
+      overflow: hidden;
+    }
+    .img-break img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .img-break-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(11,11,13,0.35) 0%, transparent 60%);
+    }
+    .img-break-caption {
+      position: absolute;
+      top: 2.5rem;
+      left: 2.5rem;
+      right: 2.5rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    /* ══════════════════════════════════
+       ABOUT
+    ══════════════════════════════════ */
+    .about-section {
+      background: var(--paper);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .about-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 5.5rem 2.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: start;
+    }
+    .about-img-wrap {
+      position: relative;
+    }
+    .about-img-wrap img {
+      width: 100%;
+      height: 500px;
+      object-fit: cover;
+      display: block;
+    }
+    .about-img-tag {
+      position: absolute;
+      bottom: 1.5rem;
+      left: 1.5rem;
+      background: var(--ink);
+      padding: 0.625rem 1rem;
+    }
+    .about-img-tag span {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+    }
+    .about-content {}
+    .about-number {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 8rem;
+      font-weight: 800;
+      color: rgba(165,167,128,0.25);
+      line-height: 0.85;
+      letter-spacing: -0.03em;
+      margin-bottom: -1rem;
+    }
+    .about-heading {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(2.25rem, 3.5vw, 3.25rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      color: var(--olive);
+      line-height: 1;
+      margin-bottom: 1.75rem;
+    }
+    .about-body {
+      font-size: 0.9375rem;
+      font-weight: 400;
+      line-height: 1.8;
+      color: var(--ink);
+      max-width: 440px;
+    }
+    .about-body + .about-body { margin-top: 1.25rem; }
+    .about-list {
+      margin-top: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      border-top: 1px solid var(--line);
+      padding-top: 2rem;
+    }
+    .about-list-item {
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+    }
+    .about-list-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.6875rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      color: var(--ink);
+      flex-shrink: 0;
+      margin-top: 0.15rem;
+    }
+    .about-list-text {
+      font-size: 0.9rem;
+      font-weight: 400;
+      line-height: 1.65;
+      color: var(--ink);
+    }
+    .about-list-text strong { color: var(--ink); font-weight: 400; }
+
+    /* ══════════════════════════════════
+       PROCESS
+    ══════════════════════════════════ */
+    .gallery-section {
+      background: var(--white);
+      padding: 5.5rem 0;
+    }
+    .gallery-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2.5rem;
+    }
+    .gallery-viewport {
+      overflow: hidden;
+      margin-top: 3rem;
+    }
+    .gallery-track {
+      display: flex;
+      gap: 10px;
+      transition: transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .gallery-item {
+      flex: 0 0 calc((100% - 7 * 10px) / 8);
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      border-radius: 2px;
+      background: var(--paper-mid);
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .gallery-item:hover img { transform: scale(1.06); }
+    .gallery-nav {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1.25rem;
+    }
+    .gallery-page-indicator {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem;
+      color: var(--ink-faint);
+      letter-spacing: 0.08em;
+      margin-right: auto;
+    }
+    .gallery-btn {
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--line);
+      background: var(--white);
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s ease, border-color 0.2s ease;
+      color: var(--ink);
+    }
+    .gallery-btn:hover:not(:disabled) {
+      background: var(--brand);
+      border-color: var(--brand);
+      color: var(--white);
+    }
+    .gallery-btn:disabled { opacity: 0.25; cursor: default; }
+    .gallery-btn svg { pointer-events: none; }
+
+    /* ══════════════════════════════════
+       TESTIMONIAL
+    ══════════════════════════════════ */
+    .testimonial-section {
+      background: var(--white);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 6rem 2.5rem;
+    }
+    .testimonial-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .testimonial-quote {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-style: italic;
+      font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+      font-weight: 400;
+      line-height: 1.3;
+      color: var(--ink);
+      letter-spacing: 0.01em;
+      margin-bottom: 2.5rem;
+    }
+    .testimonial-author {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .testimonial-author strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    /* ══════════════════════════════════
+       CONTACT / CTA
+    ══════════════════════════════════ */
+    .contact-section {
+      background: var(--paper);
+      border-top: 1px solid var(--line);
+    }
+    .contact-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 5.5rem 2.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+    .contact-left {}
+    .contact-heading {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(3rem, 5vw, 5rem);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      color: var(--olive);
+      line-height: 0.92;
+      margin-top: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    .contact-sub {
+      font-size: 0.9375rem;
+      font-weight: 400;
+      line-height: 1.75;
+      color: var(--ink);
+      max-width: 380px;
+    }
+    .contact-right {}
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .contact-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .contact-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.6875rem;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+    .contact-input {
+      width: 100%;
+      padding: 0.875rem 0;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--line);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9375rem;
+      font-weight: 400;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+    .contact-input::placeholder { color: var(--ink-faint); }
+    .contact-input:focus { border-color: var(--ink); }
+    .contact-textarea {
+      width: 100%;
+      padding: 0.875rem 0;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--line);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9375rem;
+      font-weight: 400;
+      color: var(--ink);
+      outline: none;
+      resize: none;
+      min-height: 80px;
+      transition: border-color 0.2s ease;
+    }
+    .contact-textarea::placeholder { color: var(--ink-faint); }
+    .contact-textarea:focus { border-color: var(--ink); }
+    .btn-submit {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 1rem 2.25rem;
+      background: var(--ink);
+      color: var(--white);
+      border: none;
+      border-radius: 0;
+      cursor: pointer;
+      text-decoration: none;
+      align-self: flex-start;
+      margin-top: 0.75rem;
+      transition: background 0.2s ease, transform 0.15s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .btn-submit:hover { background: var(--brand); transform: translateY(-1px); }
+    .btn-submit:active { transform: translateY(0); }
+    .btn-submit:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
+
+    /* ══════════════════════════════════
+       FOOTER
+    ══════════════════════════════════ */
+    footer {
+      background: var(--white);
+      border-top: 1px solid var(--line);
+    }
+    .footer-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 4rem 2.5rem 2.5rem;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.5fr;
+      gap: 3rem;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .footer-logo img { height: 48px; margin-bottom: 1.5rem; }
+    .footer-tagline {
+      font-size: 0.875rem;
+      line-height: 1.7;
+      color: var(--ink-soft);
+      max-width: 240px;
+    }
+    .footer-col-head {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.625rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-bottom: 1.25rem;
+    }
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.625rem;
+    }
+    .footer-links a {
+      font-size: 0.875rem;
+      color: var(--ink-soft);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .footer-links a:hover { color: var(--ink); }
+    .footer-links a:focus-visible { outline: 1px solid var(--brand); outline-offset: 3px; }
+    .footer-contact-item {
+      font-size: 0.875rem;
+      color: var(--ink-soft);
+      margin-bottom: 0.5rem;
+    }
+    .footer-contact-item a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .footer-contact-item a:hover { color: var(--ink); }
+    .footer-bottom {
+      padding-top: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer-copy {
+      font-size: 0.75rem;
+      color: var(--ink-faint);
+      letter-spacing: 0.04em;
+    }
+    .footer-socials {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .footer-social {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.625rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .footer-social:hover { color: var(--ink-soft); }
+
+    /* ══════════════════════════════════
+       REVEAL ANIMATIONS
+    ══════════════════════════════════ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.65s ease, transform 0.65s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 0.08s; }
+    .reveal-d2 { transition-delay: 0.16s; }
+    .reveal-d3 { transition-delay: 0.24s; }
+    .reveal-d4 { transition-delay: 0.32s; }
+
+    /* ══════════════════════════════════
+       MOBILE
+    ══════════════════════════════════ */
+    @media (max-width: 1024px) {
+      .projects-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: 260px;
+      }
+      .proj-featured, .proj-tall, .proj-half, .proj-wide, .proj-third {
+        grid-column: span 1;
+        grid-row: span 1;
+      }
+      .proj-featured .proj-name { font-size: 1.5rem; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      .footer-logo { grid-column: span 2; }
+    }
+
+    @media (max-width: 900px) {
+      .intro-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .about-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .about-img-wrap img { height: 340px; }
+      .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .why-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .why-text-cols { grid-template-columns: 1fr; gap: 1.5rem; }
+      .process-grid { grid-template-columns: repeat(2, 1fr); }
+      .process-item:nth-child(2) { border-right: none; }
+      .process-item:nth-child(3) { border-top: 1px solid var(--line); }
+      .hero-scroll-hint { display: none; }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .projects-grid { grid-template-columns: 1fr; grid-auto-rows: 220px; }
+      .why-text-cols { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .footer-logo { grid-column: span 1; }
+      .process-grid { grid-template-columns: 1fr; }
+      .process-item { border-right: none; border-top: 1px solid var(--line); }
+      .process-item:first-child { border-top: none; }
+      .hero-caption { padding: 0 1.5rem 2rem; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ═══════════════════════════════════
+       NAVIGATION
+  ════════════════════════════════════ -->
+  <nav id="nav" role="banner">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo" aria-label="ZEYXIS O.E. — Home">
+        <img src="brand_assets/Logo_final.png" alt="ZEYXIS O.E. Construction Company" />
+      </a>
+      <ul class="nav-links" role="list">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#projects">Our Project</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+      </ul>
+      <a href="#contact" class="nav-contact" aria-label="Contact us">Contact</a>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════
+       HERO
+  ════════════════════════════════════ -->
+  <section class="hero" aria-label="Hero">
+    <div class="hero-slides">
+      <div class="hero-slide active">
+        <img src="brand_assets/Main_Photo.jpeg" alt="ZEYXIS O.E. — Villa at dusk" />
+      </div>
+      <div class="hero-slide">
+        <img src="brand_assets/REF_1.png" alt="ZEYXIS O.E. — Villa exterior" />
+      </div>
+      <div class="hero-slide">
+        <img src="brand_assets/REF_2.png" alt="ZEYXIS O.E. — Villa at golden hour" />
+      </div>
+      <div class="hero-slide">
+        <img src="brand_assets/REF_3.JPG" alt="ZEYXIS O.E. — Coastal landscape" />
+      </div>
+      <div class="hero-slide">
+        <img src="brand_assets/REF_4.JPG" alt="ZEYXIS O.E. — Coastal cove" />
+      </div>
+      <div class="hero-slide">
+        <img src="brand_assets/REF_5.JPG" alt="ZEYXIS O.E. — Bathroom interior" />
+      </div>
+      <div class="hero-slide">
+        <img src="brand_assets/REF_6.JPG" alt="ZEYXIS O.E. — Staircase detail" />
+      </div>
+      <div class="hero-slide">
+        <img src="brand_assets/REF_7.JPG" alt="ZEYXIS O.E. — Interior" />
+      </div>
+    </div>
+    <div class="hero-overlay" aria-hidden="true"></div>
+
+    <div class="hero-caption" style="position:absolute;bottom:0;left:0;right:0;padding:0 2.5rem 2.75rem;display:flex;align-items:flex-end;justify-content:space-between;">
+      <div>
+        <p class="label-track" style="color:rgba(255,255,255,0.45);margin-bottom:1rem;">Kyparissi, Lakonia — Est. 2007</p>
+        <h1 class="hero-title">
+          Maisonettes<br />
+          for Sale
+        </h1>
+        <p class="hero-sub">Year of Construction : 2026</p>
+      </div>
+      <div class="hero-scroll-hint" aria-hidden="true">Scroll</div>
+    </div>
+
+    <div class="hero-dots" aria-hidden="true">
+      <button class="hero-dot active" data-idx="0"></button>
+      <button class="hero-dot" data-idx="1"></button>
+      <button class="hero-dot" data-idx="2"></button>
+      <button class="hero-dot" data-idx="3"></button>
+      <button class="hero-dot" data-idx="4"></button>
+      <button class="hero-dot" data-idx="5"></button>
+      <button class="hero-dot" data-idx="6"></button>
+      <button class="hero-dot" data-idx="7"></button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       INTRO
+  ════════════════════════════════════ -->
+  <section class="intro-section" id="services" aria-label="About ZEYXIS">
+    <div class="intro-inner">
+      <div class="intro-left">
+        <div class="intro-eyebrow">
+          <div class="intro-eyebrow-line"></div>
+          <span class="label-track brand">ZEYXIS O.E.</span>
+        </div>
+        <p class="intro-description reveal">
+          ZEYXIS O.E. is a Greek construction company founded in 2007, specialising in the design and construction of high-quality residential and vacation properties. We build both for private clients and develop our own residences for sale — creating homes that combine traditional Greek character with modern comfort, built with durability, functionality, and respect for the natural environment.
+        </p>
+        <div class="intro-meta">
+          <div class="reveal reveal-d1">
+            <div class="intro-stat-num" style="font-size:1.5rem;letter-spacing:0.01em;">2007</div>
+            <div class="intro-stat-lbl">Year founded</div>
+          </div>
+          <div class="reveal reveal-d2">
+            <div class="intro-stat-num" style="font-size:1.1rem;letter-spacing:-0.01em;">Kyparissi</div>
+            <div class="intro-stat-lbl">Current project — Lakonia</div>
+          </div>
+        </div>
+      </div>
+      <div class="intro-right reveal reveal-d1">
+        <h2 class="intro-headline">For Sale</h2>
+        <p class="intro-sale-sub">
+          Newly constructed 3-story maisonette
+          <span class="intro-sale-note">(Co-owning and sharing a 300m² lot)</span>
+        </p>
+        <ul class="feature-list">
+          <li>Balconies and verandas</li>
+          <li>Outdoor BBQ</li>
+          <li>Traditional doors/windows</li>
+          <li>AC/Heating (heat pump)</li>
+          <li>Foundational electrical grounding</li>
+          <li>Water storage tank for independence &amp; fire suppression</li>
+          <li>Fireplace</li>
+          <li>Roof gutters</li>
+          <li>Solar water heaters</li>
+          <li>Enclosed garage</li>
+          <li>Alarm system</li>
+          <li>Power generator</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       WHY KYPARISSI
+  ════════════════════════════════════ -->
+  <div class="why-strip" style="border-top:1px solid rgba(255,255,255,0.1);border-bottom:1px solid rgba(255,255,255,0.1);">
+    <div class="why-inner">
+      <div class="why-heading-col reveal">
+        <p class="why-eyebrow">Location</p>
+        <h2 class="why-title">Why<br /><em>Kyparissi?</em></h2>
+      </div>
+      <div class="why-text-cols reveal reveal-d1">
+        <p class="why-para">
+          <strong>Kyparissi, Lakonia</strong> is a hidden coastal gem of the Peloponnese, where crystal-clear waters, dramatic mountain views, and authentic Greek village life come together. Peaceful, private, and untouched by mass tourism, it offers the kind of natural beauty and calm atmosphere that is becoming increasingly rare.
+        </p>
+        <p class="why-para">
+          From its charming traditional village to the seaside area of Paralia, Kyparissi is surrounded by beautiful beaches, local tavernas, olive trees, pine forests, walking trails, and open views of the <strong>Myrtoan Sea</strong>. It is an ideal destination for those looking for a holiday home or permanent retreat in a place that feels both exclusive and genuinely authentic.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       PROJECTS
+  ════════════════════════════════════ -->
+  <section class="projects-section" id="projects" aria-label="Current Development">
+
+    <div class="section-label-row reveal">
+      <div>
+        <span class="label-track brand" style="display:block;margin-bottom:0.5rem;">Current Development</span>
+        <h2>Kyparissi Residences</h2>
+      </div>
+    </div>
+
+    <div class="projects-grid">
+
+      <div class="proj-card proj-featured reveal">
+        <img src="brand_assets/Main_Photo.jpeg" alt="Kyparissi Vrysi Residences at dusk" loading="lazy" />
+        <div class="proj-card-overlay"></div>
+        <div class="proj-card-info">
+          <span class="proj-tag">Residential · In Progress</span>
+          <div class="proj-name">Vrysi Maisonettes</div>
+          <div class="proj-loc">Kyparissi, Lakonia — 700m from the sea</div>
+        </div>
+      </div>
+
+      <div class="proj-card proj-tall reveal reveal-d1">
+        <img src="brand_assets/REF_2.png" alt="Kyparissi residence at golden hour" loading="lazy" />
+        <div class="proj-card-overlay"></div>
+        <div class="proj-card-info">
+          <span class="proj-tag">Exterior</span>
+          <div class="proj-name">Mountain & Sea Setting</div>
+          <div class="proj-loc">Parnonas, Lakonia</div>
+        </div>
+      </div>
+
+      <div class="proj-card reveal reveal-d2" style="grid-column:span 6;grid-row:span 1;">
+        <img src="brand_assets/REF_5.JPG" alt="Bathroom interior detail" loading="lazy" />
+        <div class="proj-card-overlay"></div>
+        <div class="proj-card-info">
+          <span class="proj-tag">Interior Detail</span>
+          <div class="proj-name">Bathroom Finishes</div>
+        </div>
+      </div>
+
+      <div class="proj-card reveal reveal-d2" style="grid-column:span 6;grid-row:span 1;">
+        <img src="brand_assets/REF_6.JPG" alt="Interior staircase detail" loading="lazy" />
+        <div class="proj-card-overlay"></div>
+        <div class="proj-card-info">
+          <span class="proj-tag">Interior Detail</span>
+          <div class="proj-name">Staircase & Microcement</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="project-desc-row reveal">
+      <p style="font-size:0.9375rem;line-height:1.8;color:var(--ink-mid);">
+        Our current development is located in <strong style="color:var(--ink);">Kyparissi, Lakonia</strong>, in the traditional settlement of Vrysi, approximately 700 metres from the sea. The project consists of two newly constructed maisonette-style residences currently under development.
+      </p>
+      <p style="font-size:0.9375rem;line-height:1.8;color:var(--ink-mid);">
+        The location combines the natural beauty of the Parnonas mountain landscape with easy access to the sea — a unique setting for both summer and year-round living. Each residence includes living areas, kitchen, bedrooms, bathrooms, verandas, private parking, outdoor shower, and BBQ area, with independent systems for heating, cooling, water, electricity, and security.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       FULL-WIDTH IMAGE BREAK
+  ════════════════════════════════════ -->
+  <div class="img-break" aria-hidden="true">
+    <img src="brand_assets/REF_3.JPG" alt="Kyparissi coastline, Lakonia" />
+    <div class="img-break-overlay"></div>
+    <div class="img-break-caption">
+      <span class="label-track" style="color:rgba(255,255,255,0.4);">Kyparissi, Lakonia — Where the mountain meets the sea</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       ABOUT
+  ════════════════════════════════════ -->
+  <section class="about-section" id="about" aria-label="About ZEYXIS">
+    <div class="about-inner">
+
+      <div class="about-img-wrap reveal">
+        <img src="brand_assets/REF_1.png" alt="Kyparissi residence during construction" loading="lazy" />
+        <div class="about-img-tag">
+          <span>ZEYXIS O.E. (N. PEZAS &amp; SIA O.E.) — Kyparissi, Lakonia</span>
+        </div>
+      </div>
+
+      <div class="about-content">
+        <span class="label-track brand reveal" style="display:block;margin-bottom:0.75rem;">Who We Are</span>
+        <div class="about-number reveal" aria-hidden="true" style="font-size:5.5rem;">2007</div>
+        <h2 class="about-heading reveal reveal-d1">
+          Built on<br />character.
+        </h2>
+        <p class="about-body reveal reveal-d1">
+          ZEYXIS O.E. is a construction company established in 2007, specialising in the development and construction of high-quality residential and vacation properties in Greece. We build our own residences for sale and take on private commissions — delivering homes designed to stand the test of time.
+        </p>
+        <p class="about-body reveal reveal-d2">
+          Our work is guided by durability, functionality, architectural character, and respect for the natural environment surrounding each project. We aim to create homes that combine traditional Greek aesthetics with modern living standards — offering comfort, safety, and long-term value.
+        </p>
+        <div class="about-list">
+          <div class="about-list-item reveal reveal-d1">
+            <span class="about-list-num">01</span>
+            <p class="about-list-text"><strong>Structural reliability</strong> — earthquake-resistant methods, quality materials, and careful planning at every stage of construction.</p>
+          </div>
+          <div class="about-list-item reveal reveal-d2">
+            <span class="about-list-num">02</span>
+            <p class="about-list-text"><strong>Energy & environmental focus</strong> — thermal insulation, waterproofing, and autonomous systems for heating, cooling, water, and electricity.</p>
+          </div>
+          <div class="about-list-item reveal reveal-d3">
+            <span class="about-list-num">03</span>
+            <p class="about-list-text"><strong>Complete outdoor living</strong> — terraces, BBQ areas, parking, and functional exterior layouts designed for year-round use.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       PROCESS
+  ════════════════════════════════════ -->
+  <section class="gallery-section" id="gallery" aria-label="Project Gallery">
+    <div class="gallery-inner">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem;" class="reveal">
+        <div>
+          <span class="label-track brand" style="display:block;margin-bottom:0.5rem;">Vrysi Maisonettes — Kyparissi</span>
+          <h2 style="font-family:'Barlow Condensed',sans-serif;font-size:clamp(2rem,3.5vw,3rem);font-weight:700;text-transform:uppercase;letter-spacing:-0.01em;color:var(--ink);">Project Gallery</h2>
+        </div>
+        <p style="font-size:0.9rem;line-height:1.7;color:var(--ink-soft);max-width:340px;text-align:right;">
+          A closer look at the construction and finishes of our current residential development in Kyparissi, Lakonia.
+        </p>
+      </div>
+
+      <div class="gallery-viewport reveal" id="galleryViewport">
+        <div class="gallery-track" id="galleryTrack">
+          <div class="gallery-item"><img src="brand_assets/Gallery_Assets/004cb195-4daf-45da-8494-5214c18b6856.JPG" alt="Project photo" loading="lazy" /></div>
+          <div class="gallery-item"><img src="brand_assets/Gallery_Assets/0176ce21-eb82-4c97-b19b-83161face23a.JPG" alt="Project photo" loading="lazy" /></div>
+          <div class="gallery-item"><img src="brand_assets/Gallery_Assets/115d19fa-67c4-41fa-9663-fc328e8031eb.JPG" alt="Project photo" loading="lazy" /></div>
+          <div class="gallery-item"><img src="brand_assets/Gallery_Assets/12b1821c-250f-4df0-9538-7cdc0af34172.JPG" alt="Project photo" loading="lazy" /></div>
+          <div class="gallery-item"><img src="brand_assets/Gallery_Assets/191d7f67-7ff6-4009-9ef5-294ac85a2dc5.JPG" alt="Project photo" loading="lazy" /></div>
+          <div class="gallery-item"><img src="brand_assets/Gallery_Assets/244a7f6a-9cae-4ecf-9985-a729b7d7da9f.JPG" alt="Project photo" loading="lazy" /></div>
+          <div class="gallery-item"><img src="brand_assets/Gallery_Assets/29c2978a-2982-4b2d-a222-fc9dffc05821.JPG" alt="Project photo" loading="lazy" /></div>
+          <div class="gallery-item"><img src="brand_assets/Gallery_Assets/2b191bfd-0f9a-4832-a89c-cb992fbbb2b8.JPG" alt="Project photo" loading="lazy" /></div>
+          <div class="gallery-item"><img src="brand_assets/Gallery_Assets/31940352-ab84-476c-a01b-269c901812ac.JPG" alt="Project photo" loading="lazy" /></div>
+          <div class="gallery-item"><img src="brand_assets/Gallery_Assets/41a8417e-9a00-4585-97ac-2dcaf39f2d8f.JPG" alt="Project photo" loading="lazy" /></div>
+          <div class="gallery-item"><img src="brand_assets/Gallery_Assets/47acc843-d5fa-420c-af3f-5796ff5f9d3f.JPG" alt="Project photo" loading="lazy" /></div>
+          <div class="gallery-item"><img src="brand_assets/Gallery_Assets/4e2d4ab6-8ed3-4392-96b0-d574be531e9e.JPG" alt="Project photo" loading="lazy" /></div>
+          <div class="gallery-item"><img src="brand_assets/Gallery_Assets/513d088f-f7c6-4ccf-9924-724ed8e28bf4.JPG" alt="Project photo" loading="lazy" /></div>
+          <div class="gallery-item"><img src="brand_assets/Gallery_Assets/7bae70a5-00b5-4a31-80ec-f3e78073a527.JPG" alt="Project photo" loading="lazy" /></div>
+          <div class="gallery-item"><img src="brand_assets/Gallery_Assets/79d5ba72-95e2-4067-966a-3d97da38c362.JPG" alt="Project photo" loading="lazy" /></div>
+          <div class="gallery-item"><img src="brand_assets/Gallery_Assets/9e6e1193-c0b3-4432-9b49-d67c1d3e26ea.JPG" alt="Project photo" loading="lazy" /></div>
+          <div class="gallery-item"><img src="brand_assets/Gallery_Assets/a73ae456-4624-4669-bed2-1d482bec9701.JPG" alt="Project photo" loading="lazy" /></div>
+          <div class="gallery-item"><img src="brand_assets/Gallery_Assets/b2053980-9311-4ccf-98d9-55a86d60f437.JPG" alt="Project photo" loading="lazy" /></div>
+          <div class="gallery-item"><img src="brand_assets/Gallery_Assets/bdb9f2ab-bdc6-4263-bb8e-7372ae0e47da.JPG" alt="Project photo" loading="lazy" /></div>
+          <div class="gallery-item"><img src="brand_assets/Gallery_Assets/bdcab584-36c4-4279-9e24-275ae18c896e.JPG" alt="Project photo" loading="lazy" /></div>
+          <div class="gallery-item"><img src="brand_assets/Gallery_Assets/c617450d-6617-49ab-b427-ff1c138dfc9f.JPG" alt="Project photo" loading="lazy" /></div>
+          <div class="gallery-item"><img src="brand_assets/Gallery_Assets/cb0d098d-436b-457d-8b3f-70ca60bf0b20.JPG" alt="Project photo" loading="lazy" /></div>
+          <div class="gallery-item"><img src="brand_assets/Gallery_Assets/e0b43193-0aa5-41e1-b1f7-7efa4b0539f1.JPG" alt="Project photo" loading="lazy" /></div>
+          <div class="gallery-item"><img src="brand_assets/Gallery_Assets/f60b62c3-e919-47fa-b0f0-ddd5b85316e1.JPG" alt="Project photo" loading="lazy" /></div>
+          <div class="gallery-item"><img src="brand_assets/Gallery_Assets/IMG_2837.JPG" alt="Project photo" loading="lazy" /></div>
+          <div class="gallery-item"><img src="brand_assets/Gallery_Assets/IMG_8174.JPG" alt="Project photo" loading="lazy" /></div>
+        </div>
+      </div>
+
+      <div class="gallery-nav">
+        <span class="gallery-page-indicator" id="galleryPageIndicator">1 / 4</span>
+        <button class="gallery-btn" id="galleryBtnPrev" aria-label="Previous images" disabled>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 2L4 7L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="gallery-btn" id="galleryBtnNext" aria-label="Next images">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 2L10 7L5 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       TESTIMONIAL
+  ════════════════════════════════════ -->
+  <section class="testimonial-section" aria-label="Brand philosophy">
+    <div class="testimonial-inner">
+      <blockquote class="testimonial-quote reveal">
+        "We build more than houses — we create residences designed to last. Every detail is approached with care and purpose."
+      </blockquote>
+      <p class="testimonial-author reveal reveal-d1">
+        <strong>ZEYXIS O.E.</strong> — Est. 2007, Greece
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       CONTACT
+  ════════════════════════════════════ -->
+  <section class="contact-section" id="contact" aria-label="Contact ZEYXIS">
+    <div class="contact-inner">
+
+      <div class="contact-left">
+        <span class="label-track brand reveal" style="display:block;">Get in touch</span>
+        <h2 class="contact-heading reveal reveal-d1">
+          Contact us.
+        </h2>
+        <p class="contact-sub reveal reveal-d2">
+          Interested in our current project or planning a new residential build? Get in touch and we'll be happy to discuss your vision.
+        </p>
+        <div style="margin-top:2.5rem;" class="reveal reveal-d3">
+          <p style="font-size:0.8rem;color:var(--ink);font-weight:400;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.5rem;font-family:'Space Grotesk',sans-serif;">Email</p>
+          <a href="mailto:zeyxisoe@gmail.com" style="font-size:0.9375rem;color:var(--ink);font-weight:400;text-decoration:none;transition:color .2s ease;" onmouseover="this.style.color='var(--ink-soft)'" onmouseout="this.style.color='var(--ink)'">zeyxisoe@gmail.com</a>
+        </div>
+        <div style="margin-top:1.25rem;" class="reveal reveal-d3">
+          <p style="font-size:0.8rem;color:var(--ink);font-weight:400;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.5rem;font-family:'Space Grotesk',sans-serif;">Location</p>
+          <span style="font-size:0.9375rem;color:var(--ink);font-weight:400;">Kyparissi, Lakonia — Greece</span>
+        </div>
+      </div>
+
+      <div class="contact-right reveal reveal-d1">
+        <form class="contact-form" id="contactForm" novalidate aria-label="Contact form">
+          <div class="contact-field">
+            <label class="contact-label" for="cf-name">Full name</label>
+            <input class="contact-input" type="text" id="cf-name" name="name" placeholder="Your full name" autocomplete="name" required />
+          </div>
+          <div class="contact-field">
+            <label class="contact-label" for="cf-email">Email address</label>
+            <input class="contact-input" type="email" id="cf-email" name="email" placeholder="your@email.com" autocomplete="email" required />
+          </div>
+          <div class="contact-field">
+            <label class="contact-label" for="cf-project">Subject</label>
+            <input class="contact-input" type="text" id="cf-project" name="subject" placeholder="e.g. Want to buy, New build" />
+          </div>
+          <div class="contact-field">
+            <label class="contact-label" for="cf-message">Message</label>
+            <textarea class="contact-textarea" id="cf-message" name="message" placeholder="Tell us what you'd like to know…" rows="3" required></textarea>
+          </div>
+
+          <div id="formSuccess" style="display:none;margin-top:1rem;padding:0.875rem 1rem;background:rgba(59,83,35,0.08);border-left:3px solid var(--brand);font-family:'Space Grotesk',sans-serif;font-size:0.85rem;color:var(--brand);">
+            Thank you — your message has been sent. We'll be in touch shortly.
+          </div>
+          <div id="formError" style="display:none;margin-top:1rem;padding:0.875rem 1rem;background:rgba(180,40,40,0.07);border-left:3px solid #b42828;font-family:'Space Grotesk',sans-serif;font-size:0.85rem;color:#b42828;">
+            Something went wrong. Please email us directly at <a href="mailto:zeyxisoe@gmail.com" style="color:inherit;">zeyxisoe@gmail.com</a>
+          </div>
+
+          <button type="submit" class="btn-submit" id="submitBtn" aria-label="Send enquiry">
+            Send enquiry
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+              <path d="M1.5 6.5h10M6.5 1.5l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════
+       FOOTER
+  ════════════════════════════════════ -->
+  <footer role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-logo">
+          <img src="brand_assets/Logo_final.png" alt="ZEYXIS O.E." />
+          <p style="font-family:'Space Grotesk',sans-serif;font-size:0.6rem;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:0.75rem;">N. PEZAS &amp; SIA O.E.</p>
+          <p class="footer-tagline">Building high-quality residential and vacation properties in Greece since 2007. We develop our own residences for sale and build for private clients — with a commitment to durability, craftsmanship, and traditional Greek character.</p>
+        </div>
+
+        <div>
+          <p class="footer-col-head">Services</p>
+          <ul class="footer-links" role="list">
+            <li><a href="#services">New Construction</a></li>
+            <li><a href="#services">Vacation Properties</a></li>
+            <li><a href="#services">Holiday Residences</a></li>
+            <li><a href="#services">Outdoor Spaces</a></li>
+            <li><a href="#services">Autonomous Systems</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="footer-col-head">Company</p>
+          <ul class="footer-links" role="list">
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#projects">Our Project</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="footer-col-head">Contact</p>
+          <div class="footer-contact-item"><a href="mailto:info@zeyxis.gr">info@zeyxis.gr</a></div>
+          <div class="footer-contact-item" style="margin-top:0.75rem;">Kyparissi, Lakonia</div>
+          <div class="footer-contact-item">Greece</div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span class="footer-copy">© 2026 ZEYXIS O.E. (N. PEZAS &amp; SIA O.E.) — All rights reserved.</span>
+        <div class="footer-socials">
+          <a href="#" class="footer-social" aria-label="LinkedIn">LinkedIn</a>
+          <a href="#" class="footer-social" aria-label="Instagram">Instagram</a>
+          <a href="#" class="footer-social" aria-label="Facebook">Facebook</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Intersection observer — scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          revealObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -32px 0px' });
+    revealEls.forEach(el => revealObs.observe(el));
+
+    // Fire hero reveals immediately
+    document.querySelectorAll('.hero .reveal').forEach(el => {
+      setTimeout(() => el.classList.add('visible'), 80);
+    });
+
+    // Hero slideshow
+    const heroSlides = document.querySelectorAll('.hero-slide');
+    const heroDots   = document.querySelectorAll('.hero-dot');
+    let heroIdx = 0;
+
+    function goToSlide(n) {
+      heroSlides[heroIdx].classList.remove('active');
+      heroDots[heroIdx].classList.remove('active');
+      heroIdx = (n + heroSlides.length) % heroSlides.length;
+      heroSlides[heroIdx].classList.add('active');
+      heroDots[heroIdx].classList.add('active');
+    }
+
+    heroDots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        clearInterval(heroTimer);
+        goToSlide(+dot.dataset.idx);
+        heroTimer = setInterval(() => goToSlide(heroIdx + 1), 4000);
+      });
+    });
+
+    let heroTimer = setInterval(() => goToSlide(heroIdx + 1), 4000);
+
+    // Nav: transparent over hero, white when scrolled into content
+    const nav = document.getElementById('nav');
+    const navLinkEls = nav.querySelectorAll('.nav-links a');
+    const navContactEl = nav.querySelector('.nav-contact');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > window.innerHeight - 80) {
+        nav.style.background = 'rgba(255,255,255,0.97)';
+        nav.style.backdropFilter = 'blur(10px)';
+        nav.style.borderBottom = '1px solid rgba(11,11,13,0.1)';
+        navLinkEls.forEach(a => a.style.color = 'rgba(11,11,13,0.55)');
+        navContactEl.style.color = '#0B0B0D';
+        navContactEl.style.borderColor = 'rgba(11,11,13,0.22)';
+      } else {
+        nav.style.background = 'transparent';
+        nav.style.backdropFilter = 'none';
+        nav.style.borderBottom = 'none';
+        navLinkEls.forEach(a => a.style.color = 'rgba(255,255,255,0.55)');
+        navContactEl.style.color = '#ffffff';
+        navContactEl.style.borderColor = 'rgba(255,255,255,0.25)';
+      }
+    }, { passive: true });
+
+    // Project Gallery carousel
+    const galleryTrack = document.getElementById('galleryTrack');
+    const galleryBtnPrev = document.getElementById('galleryBtnPrev');
+    const galleryBtnNext = document.getElementById('galleryBtnNext');
+    const galleryPageIndicator = document.getElementById('galleryPageIndicator');
+    const GALLERY_PER_PAGE = 8;
+    const GALLERY_TOTAL = 26;
+    const GALLERY_PAGES = Math.ceil(GALLERY_TOTAL / GALLERY_PER_PAGE);
+    let galleryPage = 0;
+
+    function updateGallery() {
+      const item = galleryTrack.querySelector('.gallery-item');
+      const itemWidth = item.offsetWidth;
+      const gap = 10;
+      const offset = galleryPage * (itemWidth + gap) * GALLERY_PER_PAGE;
+      galleryTrack.style.transform = 'translateX(-' + offset + 'px)';
+      galleryBtnPrev.disabled = galleryPage === 0;
+      galleryBtnNext.disabled = galleryPage >= GALLERY_PAGES - 1;
+      galleryPageIndicator.textContent = (galleryPage + 1) + ' / ' + GALLERY_PAGES;
+    }
+
+    galleryBtnPrev.addEventListener('click', () => { if (galleryPage > 0) { galleryPage--; updateGallery(); } });
+    galleryBtnNext.addEventListener('click', () => { if (galleryPage < GALLERY_PAGES - 1) { galleryPage++; updateGallery(); } });
+    window.addEventListener('resize', updateGallery, { passive: true });
+    updateGallery();
+
+    // ── Contact form (EmailJS) ────────────────────────────────────
+    // Replace the three placeholders below with your EmailJS credentials
+    const EMAILJS_PUBLIC_KEY  = 'cwroofduSrdDRtaLL';
+    const EMAILJS_SERVICE_ID  = 'service_ud6y61s';
+    const EMAILJS_TEMPLATE_ID = 'template_b026jod';
+
+    emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+
+    const contactForm = document.getElementById('contactForm');
+    const submitBtn   = document.getElementById('submitBtn');
+    const formSuccess = document.getElementById('formSuccess');
+    const formError   = document.getElementById('formError');
+    const submitBtnOriginal = submitBtn.innerHTML;
+
+    contactForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      formSuccess.style.display = 'none';
+      formError.style.display   = 'none';
+
+      const name    = document.getElementById('cf-name').value.trim();
+      const email   = document.getElementById('cf-email').value.trim();
+      const subject = document.getElementById('cf-project').value.trim();
+      const message = document.getElementById('cf-message').value.trim();
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+      if (!name || !email || !message) {
+        formError.textContent   = 'Please fill in your name, email, and message.';
+        formError.style.display = 'block';
+        return;
+      }
+      if (!emailOk) {
+        formError.textContent   = 'Please enter a valid email address.';
+        formError.style.display = 'block';
+        return;
+      }
+
+      submitBtn.disabled  = true;
+      submitBtn.innerHTML = 'Sending…';
+
+      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        from_name:    name,
+        from_email:   email,
+        subject:      subject || '(no subject)',
+        message:      message,
+        reply_to:     email
+      })
+      .then(function () {
+        formSuccess.style.display = 'block';
+        contactForm.reset();
+      })
+      .catch(function () {
+        formError.innerHTML     = 'Something went wrong. Please email us directly at <a href="mailto:zeyxisoe@gmail.com" style="color:inherit;">zeyxisoe@gmail.com</a>';
+        formError.style.display = 'block';
+      })
+      .finally(function () {
+        submitBtn.disabled  = false;
+        submitBtn.innerHTML = submitBtnOriginal;
+      });
+    });
+  </script>
+
+</body>
+</html>
